@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email — Manhole Notebook</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2c2c2c;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1rem;
+            border-radius: 22px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        .status {
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .status.loading {
+            background: #f5f5f5;
+        }
+
+        .status.success {
+            background: #e8f5e9;
+        }
+
+        .status.error {
+            background: #ffebee;
+        }
+
+        .status-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .status-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .status.loading .status-title { color: #666; }
+        .status.success .status-title { color: #2e7d32; }
+        .status.error .status-title { color: #c62828; }
+
+        .status-message {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e0e0e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 0.75rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .app-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .app-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .retry-btn {
+            display: inline-block;
+            background: #f5f5f5;
+            color: #666;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .retry-btn:hover {
+            background: #e8e8e8;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .footer a {
+            color: #888;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <img src="assets/logo.png" alt="Manhole Notebook" class="logo">
+        <h1>Manhole Notebook</h1>
+        <p class="subtitle">マンホールノート</p>
+
+        <!-- Loading State -->
+        <div id="loading" class="status loading">
+            <div class="spinner"></div>
+            <div class="status-title" data-ja="確認中..." data-en="Verifying...">Verifying...</div>
+            <div class="status-message" data-ja="メールアドレスを確認しています" data-en="Confirming your email address">Confirming your email address</div>
+        </div>
+
+        <!-- Success State -->
+        <div id="success" class="status success hidden">
+            <div class="status-icon">✓</div>
+            <div class="status-title" data-ja="確認完了!" data-en="Email Verified!">Email Verified!</div>
+            <div class="status-message" data-ja="メールアドレスが確認されました。アプリに戻って続けてください。" data-en="Your email has been confirmed. Return to the app to continue.">Your email has been confirmed. Return to the app to continue.</div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="status error hidden">
+            <div class="status-icon">✕</div>
+            <div class="status-title" data-ja="確認できませんでした" data-en="Verification Failed">Verification Failed</div>
+            <div class="status-message" id="error-message" data-ja="リンクが無効または期限切れです。アプリから新しい確認メールを送信してください。" data-en="This link is invalid or has expired. Please request a new verification email from the app.">This link is invalid or has expired. Please request a new verification email from the app.</div>
+        </div>
+
+        <!-- No Token State -->
+        <div id="no-token" class="status error hidden">
+            <div class="status-icon">?</div>
+            <div class="status-title" data-ja="無効なリンク" data-en="Invalid Link">Invalid Link</div>
+            <div class="status-message" data-ja="確認トークンが見つかりません。メールのリンクをもう一度クリックしてください。" data-en="No verification token found. Please click the link in your email again.">No verification token found. Please click the link in your email again.</div>
+        </div>
+
+        <!-- App Link (shown on success) -->
+        <a id="open-app" href="manholenotebook://" class="app-link hidden" data-ja="アプリを開く" data-en="Open App">Open App</a>
+
+        <!-- Retry Button (shown on error) -->
+        <button id="retry-btn" class="retry-btn hidden" onclick="verifyEmail()" data-ja="再試行" data-en="Try Again">Try Again</button>
+
+        <div class="footer">
+            <a href="https://manholenotebook.com">manholenotebook.com</a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://manhole-notebook-server-production.up.railway.app/api/v1';
+
+        // Detect Japanese locale
+        const isJapanese = navigator.language.startsWith('ja');
+
+        // Localize all elements
+        function localize() {
+            document.querySelectorAll('[data-ja][data-en]').forEach(el => {
+                el.textContent = isJapanese ? el.dataset.ja : el.dataset.en;
+            });
+        }
+
+        // Get token from URL
+        function getToken() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('token');
+        }
+
+        // Show a specific state
+        function showState(state) {
+            ['loading', 'success', 'error', 'no-token'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById('open-app').classList.add('hidden');
+            document.getElementById('retry-btn').classList.add('hidden');
+
+            document.getElementById(state).classList.remove('hidden');
+
+            if (state === 'success') {
+                document.getElementById('open-app').classList.remove('hidden');
+            }
+            if (state === 'error') {
+                document.getElementById('retry-btn').classList.remove('hidden');
+            }
+        }
+
+        // Verify email with API
+        async function verifyEmail() {
+            const token = getToken();
+
+            if (!token) {
+                showState('no-token');
+                return;
+            }
+
+            showState('loading');
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/verify-email`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token }),
+                });
+
+                if (response.ok) {
+                    showState('success');
+                } else {
+                    const data = await response.json().catch(() => ({}));
+                    console.error('Verification failed:', data);
+                    showState('error');
+                }
+            } catch (err) {
+                console.error('Network error:', err);
+                showState('error');
+            }
+        }
+
+        // Initialize
+        localize();
+        verifyEmail();
+    </script>
+</body>
+</html>
