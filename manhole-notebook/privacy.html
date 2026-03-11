@@ -23,9 +23,14 @@
             margin: 0 auto;
         }
 
-        .back {
-            display: inline-block;
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 2rem;
+        }
+
+        .back {
             color: #667eea;
             text-decoration: none;
             font-family: 'Noto Sans JP', sans-serif;
@@ -33,6 +38,20 @@
         }
 
         .back:hover {
+            text-decoration: underline;
+        }
+
+        .lang-switch {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .lang-switch a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .lang-switch a:hover {
             text-decoration: underline;
         }
 
@@ -101,10 +120,13 @@
 </head>
 <body>
     <main>
-        <a href="index.html" class="back">← Back to Manhole Notebook</a>
+        <div class="top-nav">
+            <a href="index.html" class="back">← Back to Manhole Notebook</a>
+            <span class="lang-switch"><a href="privacy-ja.html">日本語</a></span>
+        </div>
 
         <h1>Privacy Policy</h1>
-        <p class="updated">Last updated: March 4, 2026</p>
+        <p class="updated">Last updated: March 11, 2026</p>
 
         <p>Manhole Notebook ("we", "our", or "the app") is committed to protecting your privacy. This policy explains what data we collect and how we use it.</p>
 
@@ -112,39 +134,51 @@
 
         <p><strong>Account Information:</strong> When you create an account, we collect:</p>
         <ul>
-            <li>Email address (for authentication and verification)</li>
+            <li>Email address (for authentication and account recovery)</li>
+            <li>Username (required, public)</li>
             <li>Display name (optional)</li>
-            <li>Username</li>
         </ul>
 
-        <p><strong>Collection Data:</strong> We store your manhole card collection, including which cards you've collected and when.</p>
+        <p><strong>Collection Data:</strong> We store your manhole card collection, including which cards you've collected, favorited, wishlisted, and any notes you add.</p>
 
-        <p><strong>Location Data:</strong> With your permission, we access your location to show nearby cards. Location is processed locally and not stored on our servers.</p>
+        <p><strong>Social Features:</strong> If you use social features, we store:</p>
+        <ul>
+            <li>Posts you create (including captions and card references)</li>
+            <li>Location data you attach to posts (optional)</li>
+            <li>Friend connections and requests</li>
+            <li>Likes on posts</li>
+        </ul>
+
+        <p><strong>Device Information:</strong> We store push notification tokens to send you notifications (if enabled).</p>
+
+        <p><strong>Location Data:</strong> With your permission, we access your location to show nearby cards. Location is processed on your device and not stored on our servers, unless you choose to attach it to a post.</p>
 
         <h2>How We Use Your Data</h2>
         <ul>
             <li>To provide and improve the app experience</li>
             <li>To sync your collection across devices</li>
             <li>To send verification and account-related emails</li>
-            <li>To enable social features (if you choose to use them)</li>
+            <li>To enable social features (posts, friends, likes)</li>
+            <li>To send push notifications (new cards, friend requests, etc.)</li>
         </ul>
 
         <h2>Data Storage</h2>
-        <p>Your data is stored securely on servers in Japan. Card images and public data are served via Cloudflare's global CDN.</p>
+        <p>Your data is stored securely on servers with encryption at rest and in transit. Card images and public data are served via Cloudflare's global CDN.</p>
 
         <h2>Third-Party Services</h2>
         <ul>
             <li><strong>Apple Sign-In / Google Sign-In:</strong> For authentication (optional)</li>
-            <li><strong>Resend:</strong> For sending emails</li>
-            <li><strong>RevenueCat:</strong> For subscription management</li>
+            <li><strong>Apple (APNs) / Google (FCM):</strong> For push notifications</li>
+            <li><strong>Cloudflare:</strong> For content delivery</li>
         </ul>
 
         <h2>Your Rights</h2>
         <p>You can:</p>
         <ul>
-            <li>Access and export your data</li>
-            <li>Delete your account at any time from Settings</li>
-            <li>Opt out of optional data collection</li>
+            <li>Access and export your collection data</li>
+            <li>Delete your account and all associated data from Settings</li>
+            <li>Control who sees your posts (friends only or public)</li>
+            <li>Disable push notifications at any time</li>
         </ul>
 
         <div class="highlight">
@@ -152,9 +186,13 @@
             <ul style="margin-bottom: 0;">
                 <li>Sell your personal data</li>
                 <li>Share data with advertisers</li>
-                <li>Use your data for purposes other than providing the service</li>
+                <li>Track you across other apps or websites</li>
+                <li>Use analytics or tracking SDKs</li>
             </ul>
         </div>
+
+        <h2>Data Retention</h2>
+        <p>We retain your data as long as your account is active. When you delete your account, all your data is permanently deleted within 30 days.</p>
 
         <h2>Children's Privacy</h2>
         <p>The app is not intended for children under 13. We do not knowingly collect data from children under 13.</p>
@@ -163,7 +201,7 @@
         <p>We may update this policy from time to time. We will notify you of significant changes via email or in-app notification.</p>
 
         <p class="contact">
-            Questions? Contact us at <a href="mailto:support@manholenotebook.com">support@manholenotebook.com</a>
+            Questions? Contact us at <a href="mailto:gabriel@barandiaran.co">gabriel@barandiaran.co</a>
         </p>
     </main>
 </body>
