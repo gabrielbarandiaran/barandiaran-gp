@@ -8,12 +8,12 @@ Static pages for apps published by Gabriel Barandiaran.
 
 Manhole card collection app for iOS.
 
-| English | Japanese |
-|---------|----------|
-| [Landing Page](manhole-notebook/index.html) | [ランディングページ](manhole-notebook/index-ja.html) |
-| [Privacy Policy](manhole-notebook/privacy.html) | [プライバシーポリシー](manhole-notebook/privacy-ja.html) |
-| [Terms of Service](manhole-notebook/terms.html) | [利用規約](manhole-notebook/terms-ja.html) |
-| [Support](manhole-notebook/support.html) | [サポート](manhole-notebook/support-ja.html) |
+| 日本語 (Default) | English |
+|------------------|---------|
+| [ランディングページ](manhole-notebook/index.html) | [Landing Page](manhole-notebook/index-en.html) |
+| [プライバシーポリシー](manhole-notebook/privacy.html) | [Privacy Policy](manhole-notebook/privacy-en.html) |
+| [利用規約](manhole-notebook/terms.html) | [Terms of Service](manhole-notebook/terms-en.html) |
+| [サポート](manhole-notebook/support.html) | [Support](manhole-notebook/support-en.html) |
 
 ### Ruupa
 
